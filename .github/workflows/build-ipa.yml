@@ -43,30 +43,17 @@ jobs:
 
       - name: Build Unsigned Dylib
         run: |
-          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-          xcrun --sdk iphoneos clang \
-            -arch arm64 \
-            -isysroot "$SDK" \
-            -miphoneos-version-min=16.0 \
-            -fobjc-arc \
-            -c SpinCounterDylib/HUDLoader.m \
-            -o HUDLoader.o
-          xcrun --sdk iphoneos swiftc \
-            -O \
-            -target arm64-apple-ios16.0 \
-            -sdk "$SDK" \
-            -emit-library \
-            -module-name SpinCounterHUDDylib \
-            -o SpinCounterHUD.dylib \
-            -Xlinker -install_name -Xlinker @rpath/SpinCounterHUD.dylib \
-            -framework UIKit \
-            -framework SwiftUI \
-            -framework Foundation \
-            SpinCounterHUD/PassthroughWindow.swift \
-            SpinCounterHUD/TrackerState.swift \
-            SpinCounterHUD/HUDView.swift \
-            SpinCounterDylib/HUDManager.swift \
-            HUDLoader.o
+          xcodebuild \
+            -project SpinCounterHUD.xcodeproj \
+            -scheme SpinCounterHUDDylib \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build_dylib \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+          cp build_dylib/Build/Products/Release-iphoneos/SpinCounterHUD.framework/SpinCounterHUD SpinCounterHUD.dylib
+          install_name_tool -id @rpath/SpinCounterHUD.dylib SpinCounterHUD.dylib
 
       - name: Upload Dylib Artifact
         uses: actions/upload-artifact@v4

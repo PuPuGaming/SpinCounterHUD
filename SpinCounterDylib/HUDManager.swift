@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 
+@MainActor
 @objc(HUDManager)
 public final class HUDManager: NSObject {
     private static var hudWindow: PassthroughWindow?

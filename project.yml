@@ -19,7 +19,7 @@ targets:
         SWIFT_VERSION: "5.9"
 
   SpinCounterHUDDylib:
-    type: library.dynamic
+    type: framework
     platform: iOS
     sources:
       - path: SpinCounterHUD/PassthroughWindow.swift
@@ -30,9 +30,5 @@ targets:
       base:
         PRODUCT_NAME: SpinCounterHUD
         PRODUCT_MODULE_NAME: SpinCounterHUDDylib
-        MACH_O_TYPE: mh_dylib
-        EXECUTABLE_PREFIX: ""
-        EXECUTABLE_EXTENSION: dylib
-        LD_DYLIB_INSTALL_NAME: "@rpath/SpinCounterHUD.dylib"
+        GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: "5.9"
-        OTHER_LDFLAGS: "-framework UIKit -framework SwiftUI -framework Foundation"
