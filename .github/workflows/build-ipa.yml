@@ -1,0 +1,61 @@
+name: Build Unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build Unsigned App
+        run: |
+          xcodebuild \
+            -project SpinCounterHUD.xcodeproj \
+            -scheme SpinCounterHUD \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/SpinCounterHUD.app Payload/
+          zip -r SpinCounterHUD.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpinCounterHUD-ipa
+          path: SpinCounterHUD.ipa
+
+      - name: Build Unsigned Dylib
+        run: |
+          xcodebuild \
+            -project SpinCounterHUD.xcodeproj \
+            -scheme SpinCounterHUDDylib \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build_dylib \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+          cp build_dylib/Build/Products/Release-iphoneos/SpinCounterHUD.dylib SpinCounterHUD.dylib
+
+      - name: Upload Dylib Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpinCounterHUD-dylib
+          path: SpinCounterHUD.dylib

@@ -1,0 +1,38 @@
+name: SpinCounterHUD
+options:
+  bundleIdPrefix: com.local
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  SpinCounterHUD:
+    type: application
+    platform: iOS
+    sources:
+      - path: SpinCounterHUD
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.SpinCounterHUD
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.9"
+
+  SpinCounterHUDDylib:
+    type: library.dynamic
+    platform: iOS
+    sources:
+      - path: SpinCounterHUD/PassthroughWindow.swift
+      - path: SpinCounterHUD/TrackerState.swift
+      - path: SpinCounterHUD/HUDView.swift
+      - path: SpinCounterDylib
+    settings:
+      base:
+        PRODUCT_NAME: SpinCounterHUD
+        PRODUCT_MODULE_NAME: SpinCounterHUDDylib
+        MACH_O_TYPE: mh_dylib
+        EXECUTABLE_PREFIX: ""
+        EXECUTABLE_EXTENSION: dylib
+        LD_DYLIB_INSTALL_NAME: "@rpath/SpinCounterHUD.dylib"
+        SWIFT_VERSION: "5.9"
+        OTHER_LDFLAGS: "-framework UIKit -framework SwiftUI -framework Foundation"
