@@ -5,6 +5,7 @@ struct SymbolSlot: Identifiable, Codable {
     let id: Int
     let systemIcon: String
     let label: String
+    let iconColorHex: String
     var currentCount: Int
 }
 
@@ -29,18 +30,18 @@ final class TrackerState: ObservableObject {
     @Published var targetSpin: Int = 79
 
     @Published var slots: [SymbolSlot] = [
-        SymbolSlot(id: 0, systemIcon: "star.circle.fill", label: "Event", currentCount: 79),
-        SymbolSlot(id: 1, systemIcon: "hammer.fill", label: "Attack", currentCount: 4),
-        SymbolSlot(id: 2, systemIcon: "theatermasks.fill", label: "Raid", currentCount: 5),
-        SymbolSlot(id: 3, systemIcon: "capsule.fill", label: "Energy", currentCount: 121),
-        SymbolSlot(id: 4, systemIcon: "flask.fill", label: "Potion", currentCount: 251),
-        SymbolSlot(id: 5, systemIcon: "bolt.circle.fill", label: "Spin", currentCount: 251)
+        SymbolSlot(id: 0, systemIcon: "star.circle.fill", label: "Event", iconColorHex: "F5C542", currentCount: 88),
+        SymbolSlot(id: 1, systemIcon: "hammer.fill", label: "Attack", iconColorHex: "FF5252", currentCount: 13),
+        SymbolSlot(id: 2, systemIcon: "theatermasks.fill", label: "Raid", iconColorHex: "FF7EB6", currentCount: 0),
+        SymbolSlot(id: 3, systemIcon: "capsule.fill", label: "Energy", iconColorHex: "4FD1FF", currentCount: 6),
+        SymbolSlot(id: 4, systemIcon: "flask.fill", label: "Potion", iconColorHex: "9D6BFF", currentCount: 260),
+        SymbolSlot(id: 5, systemIcon: "bolt.circle.fill", label: "Spin", iconColorHex: "FFD43B", currentCount: 260)
     ]
 
     @Published var history: [IntervalRow] = [
-        IntervalRow(values: [86, 6, 12, 80]),
-        IntervalRow(values: [80, 24, 99, 7]),
-        IntervalRow(values: [6, 27, 15, 43])
+        IntervalRow(values: [86, 6, 14, 124]),
+        IntervalRow(values: [80, 24, 12, 80]),
+        IntervalRow(values: [6, 27, 99, 7])
     ]
 
     private let storageKey = "spin_counter_hud_state_v1"
